@@ -1,3 +1,4 @@
+import EventEmitter from "events";
 import { Player } from "./player";
 
 export class Game
@@ -29,6 +30,16 @@ export class Game
                 this.#availableComputerMoves.push({x:i, y:j});
             }
         }
+
+        this.eventEmitter = new EventEmitter();
+
+        this.computerPlayer.gameboard.eventEmitter.on('gameOver', () => {
+            this.eventEmitter.emit('gameOver', {isYourWin: true, message: "You won!"});
+        });
+
+        this.humanPlayer.gameboard.eventEmitter.on('gameOver', () => {
+            this.eventEmitter.emit('gameOver', {isYourWin: false, message: "You lost..."});
+        });
     }
 
     populateShips()

@@ -19,4 +19,12 @@ const player2BoardRoot = document.querySelector(".board-container#board2");
 player1BoardRoot.appendChild(player1BoardDOMObject);
 player2BoardRoot.appendChild(player2BoardDOMObject);
 
+const resultMessage = document.querySelector(".game-result");
+
 game.populateShips();
+game.eventEmitter.on('gameOver', (result) => 
+{
+    player1BoardView.handleGameOver(result.isYourWin);
+    player2BoardView.handleGameOver(!result.isYourWin);
+    resultMessage.textContent = result.message;
+});

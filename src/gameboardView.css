@@ -10,6 +10,18 @@
     background-color: gray;
 }
 
+.gameboard-grid.win
+{
+    border: 2px solid green;
+    pointer-events: none;
+}
+
+.gameboard-grid.loss
+{
+    border: 2px solid red;
+    pointer-events: none;
+}
+
 .gameboard-cell
 {
     background-color: white;

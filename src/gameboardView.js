@@ -7,6 +7,7 @@ export class GameboardView
     #height = 0;
     #width = 0;
     #isEnemyBoard = false;
+    #root;
 
     constructor()
     {
@@ -51,8 +52,14 @@ export class GameboardView
         
         this.#width = gameboard.width;
         this.#height = gameboard.height;
+        this.#root = root;
 
         return root;
+    }
+
+    handleGameOver(isWin){
+        this.#root.disabled = true;
+        this.#root.classList.add(isWin? 'win' : 'loss');
     }
 
     #onShipAdded(start, end){
