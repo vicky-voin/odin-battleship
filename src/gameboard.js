@@ -5,7 +5,10 @@ export class Gameboard
 {
     #cells = [];
     #width = 0;
+    get width () { return this.#width;}
+
     #height = 0;
+    get height () { return this.#height;}
 
     #ships = [];
 
@@ -27,10 +30,10 @@ export class Gameboard
     addShip(start, end)
     {
         if (
-            start[0] < 0 || start[0] >= this.#width - 1 ||
-            start[1] < 0 || start[1] >= this.#height - 1  ||
-            end[0] < 0 || end[0] >= this.#width - 1 ||
-            end[1] < 0 || end[1] >= this.#height - 1
+            start[0] < 0 || start[0] >= this.#width ||
+            start[1] < 0 || start[1] >= this.#height  ||
+            end[0] < 0 || end[0] >= this.#width ||
+            end[1] < 0 || end[1] >= this.#height
         ) {
             return false;
         }
@@ -69,6 +72,7 @@ export class Gameboard
             y += yDirection;
         }
 
+        this.eventEmitter.emit('shipAdded', start, end);
         return true;
     }
 
@@ -99,6 +103,20 @@ export class Gameboard
 
     receiveAttack(x,y)
     {
+        let resultObject = {
+            isHit : false,
+            isLegalMove : false,
+        };
+
+        if(this.#cells[y][x].wasHandled)
+        {
+            return resultObject;
+        }
+        else
+        {
+            this.#cells[y][x].wasHandled = true;
+        }
+
         const wasHit = !this.#cells[y][x].isEmpty;
         if(wasHit)
         {
@@ -112,7 +130,9 @@ export class Gameboard
             this.eventEmitter.emit('gameOver');
         }
 
-        return !this.#cells[y][x].isEmpty;
+        resultObject.isHit = wasHit;
+        resultObject.isLegalMove = true;
+        return resultObject;
     }
 
     #isGameOver()

@@ -1,0 +1,11 @@
+.game-container
+{
+    display: grid;
+    grid-template-columns: min-content min-content;
+    column-gap: 64px;
+}
+
+.board-title
+{
+    grid-row: 1;
+}
