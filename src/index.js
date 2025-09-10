@@ -6,7 +6,14 @@ const game = new Game();
 const player1BoardView = new GameboardView();
 const player2BoardView = new GameboardView();
 
+const randomizePositionButton = document.querySelector(".randomize-position");
+randomizePositionButton.addEventListener('click', () =>
+{
+    game.populateShips();
+})
+
 player2BoardView.eventEmitter.on('cellClicked', (x,y) => {
+    randomizePositionButton.hidden = true;
     game.handlePlayerInput(x,y);
 });
 

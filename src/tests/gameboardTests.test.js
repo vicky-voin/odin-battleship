@@ -137,3 +137,49 @@ test('reports when all ships have sunk', () => {
 
     expect(gameOverCallback).toHaveBeenCalled();
 })
+
+test('clearing the board resets board state', () => {
+    const gameboard = new Gameboard(10,10);
+
+    gameboard.addShip([0,1], [3,1]);
+    gameboard.receiveAttack(5,5);
+    gameboard.receiveAttack(0,1);
+
+    const resetCallback = jest.fn();
+    gameboard.eventEmitter.on('reset', () => {
+        resetCallback();
+    });
+
+    const missCallback = jest.fn();
+    gameboard.eventEmitter.on('miss', (x,y) => {
+        missCallback(x,y);
+    });
+
+    const hitCallback = jest.fn();
+    gameboard.eventEmitter.on('hit', (x,y) => {
+        hitCallback(x,y);
+    });
+
+    gameboard.clear();
+
+    expect(gameboard.receiveAttack(0,1)).toMatchObject({
+        isHit: false,
+        isLegalMove: true
+    });
+
+    expect(gameboard.receiveAttack(5,6)).toMatchObject({
+        isHit: false,
+        isLegalMove: true
+    });
+
+    expect(gameboard.addShip([4,1], [5,1])).toBeTruthy();
+
+    expect(gameboard.receiveAttack(4,1)).toMatchObject({
+        isHit: true,
+        isLegalMove: true
+    });
+
+    expect(missCallback).toHaveBeenCalledTimes(2);
+    expect(hitCallback).toHaveBeenCalledTimes(1);
+    expect(resetCallback).toHaveBeenCalled();
+});

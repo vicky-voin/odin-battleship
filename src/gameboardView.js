@@ -49,6 +49,7 @@ export class GameboardView
         gameboard.eventEmitter.on('shipAdded', (start, end) => this.#onShipAdded(start, end));
         gameboard.eventEmitter.on('hit', (x, y) => this.#setCellHit(x, y));
         gameboard.eventEmitter.on('miss', (x, y) => this.#setCellMiss(x, y));
+        gameboard.eventEmitter.on('reset', (x, y) => this.#clearCells());
         
         this.#width = gameboard.width;
         this.#height = gameboard.height;
@@ -98,5 +99,13 @@ export class GameboardView
     #setCellMiss(x,y)
     {
         this.#getCell(x,y).classList.add('miss');
+    }
+
+    #clearCells(){
+        this.#cells.forEach(cell => {
+            cell.classList.remove('hit');
+            cell.classList.remove('miss');
+            cell.classList.remove('ship');
+        });
     }
 }

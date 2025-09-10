@@ -135,6 +135,19 @@ export class Gameboard
         return resultObject;
     }
 
+    clear(){
+        for (let y = 0; y < this.#height; y++) {
+            const row = [];
+            for (let x = 0; x < this.#width; x++) {
+                this.#cells[y][x].isEmpty = true;
+                this.#cells[y][x].wasHandled = false;
+            }
+        }
+
+        this.#ships = [];
+        this.eventEmitter.emit('reset');
+    }
+
     #isGameOver()
     {
         return this.#ships.every(ship => ship.isSunk());
